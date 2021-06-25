@@ -1,0 +1,48 @@
+cmake_minimum_required (VERSION 3.8)
+
+project ("Infrastructure")
+
+add_library(Infrastructure 
+	"dummy.cpp"
+
+	"breakpad.cpp"
+	"crypto.cpp" #fmt
+	"d3d.cpp" #spdlog
+	"elfhash.cpp"
+	"images.cpp" #fmt
+	"json11.cpp"
+	"keyboard.cpp" # logger
+	"logging.cpp" # spdlog
+	"mdfparser.cpp"
+	"stringutil.cpp" #fmt
+	"tokenizer.cpp" # fmt
+	"version.cpp" # fmt
+	"windows.cpp"
+	"src/allocator.cpp"
+	"src/debugui/debugui.cpp"
+	"src/debugui/imgui/imgui.cpp"
+	"src/debugui/imgui/imgui_impl_dx11.cpp"
+	)
+
+
+add_compile_definitions(UNICODE)
+target_compile_features(Infrastructure PRIVATE cxx_std_17)
+target_link_libraries(Infrastructure 
+	Shlwapi.dll dbghelp.lib Psapi.lib )
+
+target_include_directories(Infrastructure 
+	PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include"
+	PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/include"
+	PRIVATE "${CMAKE_SOURCE_DIR}/EASTL/include"
+	#PRIVATE "include/platform" 
+	#PRIVATE "include/gsl"
+	#PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/fmt/include"
+	
+	#PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/Infrastructure"
+	
+	#PRIVATE "include/spdlog" 
+)
+
+install(TARGETS Infrastructure 
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib)
