@@ -3,20 +3,18 @@ cmake_minimum_required (VERSION 3.8)
 project ("Infrastructure")
 
 add_library(Infrastructure 
-	"dummy.cpp"
-
 	"breakpad.cpp"
-	"crypto.cpp" #fmt
-	"d3d.cpp" #spdlog
+	"crypto.cpp"
+	"d3d.cpp"
 	"elfhash.cpp"
-	"images.cpp" #fmt
+	"images.cpp"
 	"json11.cpp"
-	"keyboard.cpp" # logger
-	"logging.cpp" # spdlog
+	"keyboard.cpp"
+	"logging.cpp"
 	"mdfparser.cpp"
-	"stringutil.cpp" #fmt
-	"tokenizer.cpp" # fmt
-	"version.cpp" # fmt
+	"stringutil.cpp"
+	"tokenizer.cpp"
+	"version.cpp"
 	"windows.cpp"
 	"src/allocator.cpp"
 	"src/debugui/debugui.cpp"
@@ -34,13 +32,6 @@ target_include_directories(Infrastructure
 	PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include"
 	PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/include"
 	PRIVATE "${CMAKE_SOURCE_DIR}/EASTL/include"
-	#PRIVATE "include/platform" 
-	#PRIVATE "include/gsl"
-	#PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/fmt/include"
-	
-	#PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/Infrastructure"
-	
-	#PRIVATE "include/spdlog" 
 )
 
 install(TARGETS Infrastructure 
