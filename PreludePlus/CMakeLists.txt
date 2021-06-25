@@ -17,6 +17,6 @@ target_include_directories(PreludePlus
 	 )
 #target_link_libraries(PreludePlus)
 
-TARGET_LINK_LIBRARIES(PreludePlus Shlwapi.dll dbghelp.lib PTD)
+target_link_libraries(PreludePlus Shlwapi.dll dbghelp.lib PTD minhook)
 
 # TODO: Add tests and install targets if needed.

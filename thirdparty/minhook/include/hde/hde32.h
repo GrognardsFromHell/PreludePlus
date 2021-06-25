@@ -19,7 +19,7 @@
  * and change next line to:
  *   #include "pstdint.h"
  */
-#include "pstdint.h"
+#include "../../src/hde/pstdint.h"
 
 #define F_MODRM         0x00000001
 #define F_SIB           0x00000002
