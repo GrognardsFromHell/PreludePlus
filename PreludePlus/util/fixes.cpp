@@ -6,9 +6,9 @@
 #include <vector>
 #include "fixes.h"
 #include "../../Infrastructure/include/platform/windows.h"
-#include "../../dependencies/minhook/include/MinHook.h"
-#include "../../dependencies/minhook/src/trampoline.h"
-#include "../../dependencies/include/hde/hde32.h"
+#include <MinHook.h>
+#include <hde/hde32.h>
+#include <trampoline.h>
 
 using namespace std;
 

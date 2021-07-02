@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("PTD")
 
-add_library(PTD "src/dll.cpp")
+add_library(PTD STATIC "src/dll.cpp")
 
 
 message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")

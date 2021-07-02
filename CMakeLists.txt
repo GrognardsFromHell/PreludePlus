@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("PreludePlus")
 
+add_subdirectory(thirdparty)
 
 # Include sub-projects.
 add_subdirectory ("PreludePlus")

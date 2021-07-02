@@ -11,7 +11,7 @@
 
 #include <Psapi.h>
 #include "../PTD/include/ptd/dll.h"
-#include "../dependencies/include/MinHook.h"
+#include <MinHook.h>
 #include "util/fixes.h"
 #include "../Infrastructure/include/Infrastructure/logging.h"
 #include <engine.h>
