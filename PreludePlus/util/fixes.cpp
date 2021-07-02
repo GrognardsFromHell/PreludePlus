@@ -1,5 +1,6 @@
 
 //#include "stdafx.h"
+#include "Infrastructure/logging.h"
 
 #include <ptd/dll.h>
 #include <vector>
@@ -72,13 +73,13 @@ void *TempleFix::replaceFunctionInternal(uint32_t offset, void* replaceWith) {
 	
 	auto status = MH_CreateHook(target, replaceWith, &original);
 	if (status != MH_OK) {
-		//logger->error("Unable to hook the function @ {:x}: {}", offset, status);
+		logger->error("Unable to hook the function @ {:x}: {}", offset, status);
 		return nullptr;
 	}
 
 	status = MH_QueueEnableHook(target);
 	if (status != MH_OK) {
-		//logger->error("Unable to enable hook for function @ {:x}: {}", offset, status);
+		logger->error("Unable to enable hook for function @ {:x}: {}", offset, status);
 		return nullptr;
 	}
 
@@ -101,11 +102,11 @@ void TempleFix::redirectCall(uint32_t offset, void* redirectTo) {
 		oldCallTo = offset + oldInstruction.len + static_cast<int32_t>(oldInstruction.imm.imm32);
 		break;
 	default:
-		//logger->error("Unsupported opcode for replacing a call: {:x}", oldInstruction.opcode);
+		logger->error("Unsupported opcode for replacing a call: {:x}", oldInstruction.opcode);
 		break;
 	}
 
-	//logger->trace("Replacing old call to 0x{:x}", oldCallTo);
+	logger->trace("Replacing old call to 0x{:x}", oldCallTo);
 	
 	writeCall(offset, redirectTo);
 }
@@ -127,11 +128,11 @@ void TempleFix::redirectJump(uint32_t offset, void* redirectTo) {
 		oldCallTo = offset + oldInstruction.len + static_cast<int32_t>(oldInstruction.imm.imm32);
 		break;
 	default:
-		//logger->error("Unsupported opcode for replacing a jump: {:x}", oldInstruction.opcode);
+		logger->error("Unsupported opcode for replacing a jump: {:x}", oldInstruction.opcode);
 		break;
 	}
 
-	//logger->trace("Replacing old jump to 0x{:x}", oldCallTo);
+	logger->trace("Replacing old jump to 0x{:x}", oldCallTo);
 
 	writeJump(offset, redirectTo);
 }
@@ -192,7 +193,7 @@ void TempleFix::writeJump(uint32_t offset, void* redirectTo) {
 
 
 void TempleFixes::apply() {
-	//logger->info("Applying {} DLL fixes", fixes().size());
+	logger->info("Applying {} DLL fixes", fixes().size());
 
 	for (auto fix : fixes()) {
 		fix->apply();
@@ -200,9 +201,9 @@ void TempleFixes::apply() {
 
 	auto status = MH_ApplyQueued();
 	if (status != MH_OK) {
-		//logger->error("Unable to apply queued hooks: {}", status);
+		logger->error("Unable to apply queued hooks: {}", status);
 	}
 
-	//logger->info("Finished applying DLL fixes");
+	logger->info("Finished applying DLL fixes");
 
 }

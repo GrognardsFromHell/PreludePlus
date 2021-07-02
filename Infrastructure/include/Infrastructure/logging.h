@@ -4,7 +4,7 @@
 #include "platform/windows.h"
 
 // For some reason spdlog depends on format.h but doesn't include it itself
-//#include "./fmt/include/fmt/format.h"
+#include <fmt/format.h>
 #include "spdlog/logger.h"
 
 // Global TemplePlus logger

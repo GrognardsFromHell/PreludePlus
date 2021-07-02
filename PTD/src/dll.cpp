@@ -10,8 +10,8 @@
 #include <DbgHelp.h>
 
 #include <infrastructure/exception.h>
-//#include <infrastructure/logging.h>
-//#include <infrastructure/stringutil.h>
+#include <infrastructure/logging.h>
+#include <infrastructure/stringutil.h>
 #include "MinHook.h"
 
 //#include "hde/hde32.h"
@@ -277,9 +277,7 @@ namespace ptd {
 
 		// Does it even exist?
 		if (!PathFileExists(dllPath)) {
-			//auto msg(fmt::format("Prelude.exe does not exist: {}", ucs2_to_utf8(dllPath)));
-			//ucs2_to_utf8(dllPath);
-			auto msg = std::string("Prelude.exe does not exist");
+			auto msg(fmt::format("Prelude.exe does not exist: {}", ucs2_to_utf8(dllPath)));
 			throw TempleException(msg);
 		}
 
@@ -293,9 +291,8 @@ namespace ptd {
 		// Try to load it
 		mDllHandle = LoadLibrary(dllPath);
 		if (!mDllHandle) {
-			throw TempleException("Unable to load Prelude.exe");
-			//throw TempleException("Unable to load temple.dll from {}: {}",
-//				ucs2_to_utf8(dllPath), GetLastWin32Error());
+			throw TempleException("Unable to load Prelude.exe from {}: {}",
+				ucs2_to_utf8(dllPath), GetLastWin32Error());
 		}
 //
 //		// Restore the previous unhandled exception handler (from Breakpad)
@@ -306,13 +303,12 @@ namespace ptd {
 		auto baseAddr = reinterpret_cast<uint32_t>(mDllHandle);
 		mDeltaFromVanilla = baseAddr - defaultBaseAddr;
 		PeLdrApplyImageRelocations(baseAddr, mDeltaFromVanilla);
-//		logger->info("The temple.dll base address delta is: {}", mDeltaFromVanilla);
-//
+		logger->info("The Prelude.exe base address delta is: {}", mDeltaFromVanilla);
+
 		auto status = MH_Initialize();
 		if (status != MH_OK) {
 			FreeLibrary(mDllHandle);
-			//auto msg(fmt::format("Unable to initialize MinHook: {}", MH_StatusToString(status)));
-			auto msg("Unable to initialize MinHook");
+			auto msg(fmt::format("Unable to initialize MinHook: {}", MH_StatusToString(status)));
 			throw TempleException(msg);
 		}
 
@@ -323,13 +319,13 @@ namespace ptd {
 	DllImpl::~DllImpl() {
 		auto status = MH_Uninitialize();
 		if (status != MH_OK) {
-//			logger->error("Unable to shutdown MinHook: {}", MH_StatusToString(status));
+			logger->error("Unable to shutdown MinHook: {}", MH_StatusToString(status));
 		}
 
 		if (mDllHandle) {
 			if (!FreeLibrary(mDllHandle)) {
-//				logger->error("Unable to free the temple.dll library handle: {}",
-//					GetLastWin32Error());
+				logger->error("Unable to free the Prelude.exe library handle: {}",
+					GetLastWin32Error());
 			}
 		}
 
@@ -352,10 +348,8 @@ namespace ptd {
 
 	void* Dll::GetAddress(uint32_t vanillaAddress) const {
 		if (!mImpl) {
-			throw TempleException("Trying to get an address before the DLL has "
-				"been loaded is not possible.");
-			//throw TempleException("Trying to get an address ({}) before the DLL has "
-				//"been loaded is not possible.", vanillaAddress);
+			throw TempleException("Trying to get an address ({}) before the DLL has "
+				"been loaded is not possible.", vanillaAddress);
 		}
 
 		return mImpl->GetAddress(vanillaAddress);
@@ -409,10 +403,10 @@ namespace ptd {
 				GetModuleInformation(hProcess, hMods[i], &moduleInfo, cbNeeded);
 				auto fromAddress = reinterpret_cast<uint32_t>(moduleInfo.lpBaseOfDll);
 				auto toAddress = fromAddress + moduleInfo.SizeOfImage;
-				//logger->debug(" Module {}: 0x{:08x}-0x{:08x}", ucs2_to_utf8(moduleName), fromAddress, toAddress);
+				logger->debug(" Module {}: 0x{:08x}-0x{:08x}", ucs2_to_utf8(moduleName), fromAddress, toAddress);
 
 				if (fromAddress <= templeDesiredEnd && toAddress > templeDesiredStart) {
-					//conflicting = fmt::format(L"{} (0x{:08x}-0x{:08x})", moduleName, fromAddress, toAddress);
+					conflicting = fmt::format(L"{} (0x{:08x}-0x{:08x})", moduleName, fromAddress, toAddress);
 				}
 			}
 		}

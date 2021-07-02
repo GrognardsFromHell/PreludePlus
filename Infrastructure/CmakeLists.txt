@@ -20,6 +20,7 @@ add_library(Infrastructure
 	"src/debugui/debugui.cpp"
 	"src/debugui/imgui/imgui.cpp"
 	"src/debugui/imgui/imgui_impl_dx11.cpp"
+	"include/fmt/format.cc"
 	)
 
 
